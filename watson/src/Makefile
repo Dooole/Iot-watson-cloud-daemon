@@ -15,6 +15,7 @@ LDFLAGS += -liotp-as-application \
 -liotp-as-managedGateway \
 -lubus \
 -lubox \
+-largp
 
 SRC := $(wildcard *.c)
 OBJ := $(SRC:.c=.o)
