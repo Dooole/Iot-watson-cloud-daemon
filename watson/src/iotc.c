@@ -44,12 +44,6 @@ int iotc_init(struct iotc_handler *ih, struct iotc_config *cfg)
         return -1;
     }
 
-    rc = IoTPConfig_setProperty(ih->config, IoTPConfig_options_mqtt_port, cfg->port);
-    if (rc) {
-        syslog(LOG_ERR, "Failed to set port: %d\n", rc);
-        return -1;
-    }
-
     syslog(LOG_INFO, "Configuration created succesfully\n");
 
     rc = IoTPDevice_create(&ih->device, ih->config);

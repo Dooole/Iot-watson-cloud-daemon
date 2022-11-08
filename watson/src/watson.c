@@ -32,9 +32,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         case 'a':
             iotcfg->token = arg;
             break;
-        case 'p':
-            iotcfg->port = arg;
-            break;
         default:
             return ARGP_ERR_UNKNOWN;
     }
@@ -59,7 +56,6 @@ int main(int argc, char *argv[])
         {"typeid",   't', "typeid",   0, "Type ID"},
         {"deviceid", 'd', "deviceid", 0, "Device ID"},
         {"token",    'a', "token",    0, "Authentication token"},
-        {"port",     'p', "port",     0, "Port number"},
         {0}
     };
     struct argp argp = {options, parse_opt};
