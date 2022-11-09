@@ -32,6 +32,17 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
         case 'a':
             iotcfg->token = arg;
             break;
+        case ARGP_KEY_ARG:
+            iotcfg->args[state->arg_num] = arg;
+            break;
+        case ARGP_KEY_END:
+            if ((!iotcfg->orgid) || (!iotcfg->typeid) 
+                || (!iotcfg->deviceid) || (!iotcfg->token))
+        {
+            argp_usage(state);
+        }
+            break;
+        break;
         default:
             return ARGP_ERR_UNKNOWN;
     }
@@ -61,7 +72,13 @@ int main(int argc, char *argv[])
     struct argp argp = {options, parse_opt};
 
     if (argp_parse(&argp, argc, argv, 0, 0, &iotcfg)) {
-        fprintf(stderr, "Failed to parse command line arguments\n");
+        syslog(LOG_ERR, "Failed to parse command line arguments\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if ((iotcfg.orgid == NULL) || (iotcfg.typeid == NULL) 
+                || (iotcfg.deviceid == NULL) || (iotcfg.token == NULL)) {
+        syslog(LOG_ERR, "Missing command line arguments\n");
         exit(EXIT_FAILURE);
     }
 
@@ -72,12 +89,12 @@ int main(int argc, char *argv[])
     signal(SIGTERM, signal_handler);
 
     if (iotc_init(&ih, &iotcfg)) {
-        fprintf(stderr, "Failed to initialize iotc\n");
+        syslog(LOG_ERR, "Failed to initialize iotc\n");
         exit(EXIT_FAILURE);
     }
 
     if (ubus_init(&uh)) {
-        fprintf(stderr, "Failed to initialize ubus\n");
+        syslog(LOG_ERR, "Failed to initialize ubus\n");
         exit(EXIT_FAILURE);
     }
 

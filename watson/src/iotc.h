@@ -8,7 +8,7 @@ struct iotc_config {
     char *typeid;
     char *deviceid;
     char *token;
-    char *port;
+    char *args[4];
 };
 
 struct iotc_handler {
